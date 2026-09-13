@@ -1,0 +1,12 @@
+{
+    "cmake.sourceDirectory": "/home/vboxuser/ros2_ws/src/my_robot_interfaces",
+    "ROS2.distro": "jazzy",
+    "python.autoComplete.extraPaths": [
+        "/home/vboxuser/ros2_ws/install/my_py_pkg/lib/python3.12/site-packages",
+        "/opt/ros/jazzy/lib/python3.12/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/vboxuser/ros2_ws/install/my_py_pkg/lib/python3.12/site-packages",
+        "/opt/ros/jazzy/lib/python3.12/site-packages"
+    ]
+}
