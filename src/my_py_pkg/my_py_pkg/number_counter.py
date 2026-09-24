@@ -12,12 +12,13 @@ class NumberCounterNode(Node):
         self._reset_counter_service = self.create_service(ResetCounter, 'reset_counter', self.callback_reset_counter)
         self.get_logger().info('Number counter has started')
 
+
     def callback_number(self, msg:Int64):
         self._counter += msg.data
         self.get_logger().info(f"Counter: {self._counter}")
+        
 
     def callback_reset_counter(self, request:ResetCounter.Request, response:ResetCounter.Response):
-        
         if request.reset_value < 0:
             response.success = False
             response.message = "Can not reset counter to a negative value"
