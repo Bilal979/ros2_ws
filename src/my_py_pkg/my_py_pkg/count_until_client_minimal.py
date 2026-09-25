@@ -34,12 +34,26 @@ class CountUntilClientNode(Node):
 
     def callback_goal_result(self, future):
         response = future.result()
+        status = response.status
+        result = response.result
+
+        if status == GoalStatus.STATUS_SUCCEEDED:
+            self.get_logger().info('Success')
+        elif status == GoalStatus.STATUS_ABORTED:
+            self.get_logger().error('Aborted')
+        elif status == GoalStatus.STATUS_CANCELED:
+            self.get_logger().warn('Cancelled')
+
+        self.get_logger().info(f'The goal result (reached_number): ${result.reached_number}')
 
 
 def main(args=None):
     rclpy.init(args=args)
     node = CountUntilClientNode()
-    rclpy.spin(Node)
+    
+    node.send_goal(-1, 0.5)
+    
+    rclpy.spin(node)
     rclpy.shutdown()
 
 

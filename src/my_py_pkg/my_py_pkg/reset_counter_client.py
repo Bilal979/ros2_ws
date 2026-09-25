@@ -8,6 +8,7 @@ class ResetCounterClientNode(Node):
         self._reset_counter_client = self.create_client(ResetCounter, "reset_counter")
         self.get_logger().info("reset_counter_clinet node started")
 
+
     def call_reset_counter(self, value):
         while not self._reset_counter_client.wait_for_service(1.0):
             self.get_logger.warn("Waiting for service")

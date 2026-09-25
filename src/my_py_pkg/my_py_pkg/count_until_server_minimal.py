@@ -12,7 +12,7 @@ class CountUnitlServerNode(Node):
     def __init__(self):
         super().__init__("count_until_server")
         self.count_until_server_ = ActionServer(self, CountUntil, "count_until", goal_callback=self.goal_callback, execute_callback=self.execute_callback)
-
+        self.get_logger().info('count_until action server started...')
 
     def goal_callback(self, goal_request:CountUntil.Goal):
         self.get_logger().info('Received a Goal')
@@ -38,8 +38,8 @@ class CountUnitlServerNode(Node):
         # Do the processing/execution
         for i in range(target_number):
             counter +=1
-            self.get_logger.inf(f"the current counter value is {counter}")
-            time.sleep()
+            self.get_logger().info(f"the current counter value is {counter}")
+            time.sleep(delay)
 
 
         # Set the final state of the goal (abort/success/cancel)
