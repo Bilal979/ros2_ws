@@ -6,14 +6,23 @@ from example_interfaces.msg import Int64
 class NumberPublisherNode(Node):
     def __init__(self):
         super().__init__('number_publisher')
-        self._number = 2
+        # self._number = 2
+
+        # Declare Parameters
+        self.declare_parameter('number', 3)
+        self.declare_parameter('publish_period',1.0)
+
+        # Get Parameter Values
+        self.number_ = self.get_parameter('number').value
+        self.publish_period_ = self.get_parameter('publish_period').value
+
         self._number_publisher = self.create_publisher(Int64, 'number', 10)
-        self._number_timer = self.create_timer(1.0, self.publish_number)
+        self._number_timer = self.create_timer(self.publish_period_, self.publish_number)
         self.get_logger().info('Number publisher has started')
 
     def publish_number(self):
         msg = Int64()
-        msg.data = self._number
+        msg.data = self.number_
         self._number_publisher.publish(msg)
         
 
