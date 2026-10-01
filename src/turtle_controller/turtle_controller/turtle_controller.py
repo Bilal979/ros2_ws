@@ -5,10 +5,30 @@ from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 from turtlesim.srv import SetPen
 from my_robot_interfaces.srv import ActivateTurtle
+from rclpy.parameter import Parameter
 
 class TurtleController(Node):
     def __init__(self):
         super().__init__("turtle_controller")
+
+        # Declare parameters
+        self.declare_parameter('color_1', [0, 255, 0])
+        self.declare_parameter('color_2', [255, 0, 0])
+        self.declare_parameter('turtle_velocity', 1.0)
+        
+        # Get parameter values
+        self.color_1_ = self.get_parameter('color_1').value
+        self.color_2_ = self.get_parameter('color_2').value
+        self.turtle_velocity_ = self.get_parameter('turtle_velocity').value
+
+        # Set parameter callback
+        self.add_post_set_parameters_callback(self.parameter_callback)
+
+        self.get_logger().info(f"Turtle color_1: {self.color_1_}")
+        self.get_logger().info(f"Turtle color_2: {self.color_2_}")
+        self.get_logger().info(f"Turtle velocity: {self.turtle_velocity_}")
+
+
         self._current_position = "r"
         self._is_active = True
         self.cmd_vel_publisher_ = self.create_publisher(Twist, "turtle1/cmd_vel", 10)
@@ -18,6 +38,16 @@ class TurtleController(Node):
         # activate turtle service
         self._activate_turtle_service = self.create_service(ActivateTurtle, 'activate_turtle', self.callback_activate_turtle)
 
+
+    def parameter_callback(self, params: list[Parameter]):
+        for param in params:
+            if param.name == 'color_1':
+                self.color_1_ = param.value
+            elif param.name == 'color_2':
+                self.color_2_ = param.value
+            elif param.name == 'turtle_velocity':
+                self.turtle_velocity_ = param.value
+    
 
     def callback_activate_turtle(self, request:ActivateTurtle.Request, response:ActivateTurtle.Response):
 
@@ -39,13 +69,23 @@ class TurtleController(Node):
             return
         
         twist_msg = Twist()
-        twist_msg.linear.x = 1.0
-        twist_msg.angular.z = 1.0
+        # twist_msg.linear.x = 1.0
+        # twist_msg.angular.z = 1.0
+
+        # set velocity from turtle_velocity param
+        twist_msg.linear.x = self.turtle_velocity_
+        twist_msg.angular.z = self.turtle_velocity_
+
         position = 'l'
 
         if msg.x >= 5.5:
-            twist_msg.linear.x = 2.0
-            twist_msg.angular.z = 2.0
+            # twist_msg.linear.x = 2.0
+            # twist_msg.angular.z = 2.0
+
+            # set velocity from turtle_velocity param
+            twist_msg.linear.x = self.turtle_velocity_ * 2.0
+            twist_msg.angular.z = self.turtle_velocity_ * 2.0
+
             position = 'r'
 
         self.cmd_vel_publisher_.publish(twist_msg)
@@ -61,13 +101,24 @@ class TurtleController(Node):
 
         request = SetPen.Request()
 
-        request.r = 0
-        request.g = 255
+        # request.r = 0
+        # request.g = 255
+
+        # Set color from color_1 parameter
+        request.r = self.color_1_[0]
+        request.g = self.color_1_[1]
+        request.b = self.color_1_[2]
+
         request.width = 3
 
         if value == "r":
-            request.r = 255
-            request.g = 0
+            # request.r = 255
+            # request.g = 0
+            
+            # Set color from color_1 parameter
+            request.r = self.color_2_[0]
+            request.g = self.color_2_[1]
+            request.b = self.color_2_[2]
 
         future = self._set_pen_client.call_async(request)
         future.add_done_callback(self.callback_set_pen_response)
