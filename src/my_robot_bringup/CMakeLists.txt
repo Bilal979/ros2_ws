@@ -16,6 +16,7 @@ find_package(ament_cmake REQUIRED)
 #-----------Start Bringup/launch related things
 install(DIRECTORY
   launch
+  config
   DESTINATION share/${PROJECT_NAME}/
 )
 #-----------End Bringup/launch related things

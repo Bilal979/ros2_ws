@@ -1,0 +1,16 @@
+
+<launch>
+    <node pkg='turtlesim' exec='turtlesim_node' namespace='/t1'>
+        <param from='$(find-pkg-share my_robot_bringup)/config/turtle_params.yaml'/>
+    </node>
+    <node pkg='turtle_controller' exec='turtle_controller' namespace='/t1'>
+        <param from='$(find-pkg-share my_robot_bringup)/config/turtle_params.yaml'/>
+    </node>
+
+    <node pkg='turtlesim' exec='turtlesim_node' namespace='/t2'>
+        <param from="$(find-pkg-share my_robot_bringup)/config/turtle_params.yaml"/>
+    </node>
+    <node pkg='turtle_controller' exec='turtle_controller' namespace='/t2'>
+        <param from="$(find-pkg-share my_robot_bringup)/config/turtle_params.yaml"/>
+    </node>
+</launch>

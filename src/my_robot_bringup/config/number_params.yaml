@@ -1,0 +1,14 @@
+/number_publisher:
+  ros__parameters:
+    number: 7
+    publish_period: 4.0
+
+/num_pub1:
+  ros__parameters:
+    number: 1
+    publish_period: 1.0
+
+/num_pub2:
+  ros__parameters:
+    number: 2
+    publish_period: 2.0
